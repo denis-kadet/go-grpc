@@ -1,0 +1,48 @@
+syntax = "proto3";
+
+//что-то вроде пространство имен
+package auth;
+
+//для Go директива package игнорируется  нужно опция go_package
+option go_package = "tuzov.sso.v1;ssov1";
+
+//Оперделение интерфейса службы
+service Auth {
+  rpc Register (RegisterRequest) returns (RegisterResponse);
+  rpc Login (LoginRequest) returns (LoginResponse);
+  rpc IsAdmin (IsAdminRequest) returns (IsAdminResponse);
+}
+
+/**
+* Определение формата сообщения (Запрос)
+* Если удалили поле из сообщение, надо добавить его в
+* reserved чтобы компилятор не допустил его использования
+*/
+message RegisterRequest {
+  string email = 1;//имя = тип
+  string password = 2;
+}
+/**
+* Определение дополнительного формата сообщения (Ответ)
+*/
+message RegisterResponse {
+  int64 user_id = 1;
+}
+
+message LoginRequest {
+  string email = 1;
+  string password = 2;
+  int32 app_id = 3;
+}
+
+message LoginResponse {
+  string token = 1;
+}
+
+message IsAdminRequest {
+  int64 user_id = 1;
+}
+
+message IsAdminResponse {
+  bool is_admin = 1;
+}
